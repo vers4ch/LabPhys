@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в лабораторию</title>
+    <link rel="stylesheet" href="static/style/login.css">
+</head>
+<body>
+    <div class="head">
+        <h1>Войдите в свою учетную запись</h1>
+    </div>
+    <div class="form">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <!-- <ul> -->
+                    {% for message in messages %}
+                        <p>{{ message }} <a href="laba">Войти</a></p>
+                    {% endfor %}
+                <!-- </ul> -->
+            {% endif %}
+        {% endwith %}
+    <!-- <div class="form"> -->
+        <div class="inputs">
+            <form class="forma" method="post" action="{{ url_for('login') }}">
+                <label for="username">Имя пользователя:</label>
+                <input type="text" name="username" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+
+                <br>
+                <label for="password">Пароль:</label>
+                <input type="password" name="password" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+
+                <br>
+                <button class="loginButton" type="submit">Войти</button>
+            </form>
+            <p>Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+        </div>
+    </div>
+</body>
+</html>

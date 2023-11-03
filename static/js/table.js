@@ -28,7 +28,7 @@ function createChart() {
 		data: {
 			labels: labels,
 			datasets: [{
-				label: 'T^2, с.^2',
+				label: 'T², L',
 				data: data,
 				borderColor: 'rgba(75, 192, 192, 1)',
 				borderWidth: 1

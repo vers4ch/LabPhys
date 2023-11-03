@@ -1,0 +1,98 @@
+/* st.css */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700; /* Полужирный вес шрифта */
+    src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+    /* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
+h1{
+    margin: 0;
+}
+body{
+    color: #FFFFFF;
+    font-family: 'Lato', sans-serif; 
+    background-color: #222831;
+    margin: 0;
+}
+
+.head{
+	text-align: center;
+	padding-top: 5%;
+	margin-bottom: 2%;
+}
+
+.form{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+
+	display: flex;
+	border-radius: 10px;
+	margin-top: 1em;
+}
+
+.inputs{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+
+	/* font-size: 20px; */
+	padding-top: 1em;
+	padding-bottom: 1em;
+	/* margin-left: 37.5%; */
+	width: 25%;
+	background-color: #393E46;
+	height: 15em;
+	border-radius: 10px;
+}
+
+.forma{
+	font-size: 20px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* p{
+	margin: 0;
+} */
+
+.loginButton{
+	font-size: 20px;
+	/* width: 150px;
+	height: 50px; */
+
+	width: 7em;
+	height: 2em;
+
+	border-radius: 4px;
+	color: #FFFFFF;
+    border: 3px solid #EEEEEE;
+    background-color: #00ADB5;
+
+}
+
+.loginButtonSingUp{
+	font-size: 20px;
+	/* width: 150px;
+	height: 50px; */
+
+	width: 13em;
+	height: 2em;
+
+	border-radius: 4px;
+	color: #FFFFFF;
+    border: 3px solid #EEEEEE;
+    background-color: #00ADB5;
+
+}
