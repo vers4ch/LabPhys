@@ -38,8 +38,14 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(username=username, password=hashed_password)
+
+        #security
+
+        # hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        # new_user = User(username=username, password=hashed_password)
+
+        new_user = User(username=username, password=password)
+
         db.session.add(new_user)
         db.session.commit()
         flash('Вы успешно зарегистрированы!', 'success')
@@ -53,12 +59,14 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password):
+        
+        # if user and check_password_hash(user.password, password):
+        if user and user.password == password:
             session['user_id'] = user.id
             flash('Вы уже авторизированны!', 'success')
             return redirect(url_for('laba'))
         else:
-            flash('Ошибка входа. Пожалуйста, проверьте свои данные и повторите попытку.', 'danger')
+            flash('Неверный логин или пароль. Пожалуйста, проверьте свои данные и повторите попытку.', 'danger')
     return render_template('main.html')
 
 
@@ -67,6 +75,22 @@ def laba():
     if 'user_id' in session:
         user = User.query.filter_by(id=session['user_id']).first()
         return render_template('index.html', user=user)
+    else:
+        return redirect(url_for('login'))
+    
+@app.route('/theory')
+def theory():
+    if 'user_id' in session:
+        user = User.query.filter_by(id=session['user_id']).first()
+        return render_template('theory.html', user=user)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/report')
+def report():
+    if 'user_id' in session:
+        user = User.query.filter_by(id=session['user_id']).first()
+        return render_template('report.html', user=user)
     else:
         return redirect(url_for('login'))
 

@@ -175,3 +175,33 @@ button {
     justify-content: space-between;
     margin-top: 10px; /* Добавленный отступ для разделения кнопок от таблицы */
 }
+
+.linki{
+    /* background-color: #393E46; */
+    margin-top: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4vh;
+}
+
+.hrefL{
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    border: 3px solid #EEEEEE;
+    background-color:#00ADB5;
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    text-decoration: none;
+}
+.hrefL:hover{
+    cursor: pointer;
+    background-color: rgb(88, 146, 178);
+}
+.hrefL:active{
+    color: red;
+}
