@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
-    <link rel="stylesheet" href="static/style/login.css">
+    <link rel="stylesheet" href="static/style/register.css">
 </head>
 <body>
     <div class="head">
-        <h2>Регистрация</h2>
+        <h2>Регистрация нового пользователя</h2>
     </div>
 
     <div class="form">
@@ -25,20 +25,61 @@
         <div class="inputs">
             <form class="forma" method="post" action="{{ url_for('register') }}">
                 <label for="username">Имя пользователя:</label>
-                <input type="tt" name="username" required size="20" style="font-size: 20px; text-align: center;">
-                
-                <div class="spacer"></div>
+                <input type="tt" name="username" placeholder="ivanov.vk" required size="20" style="font-size: 20px; text-align: center;">
 
-                <br>
+                <div class="spacer"></div>
+                <!-- <br> -->
+              
+                <label for="last_name">Фамилия:</label>
+                <input type="last_name" name="last_name" placeholder="Иванов" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+                <!-- <br> -->
+                <label for="first_name">Имя:</label>
+                <input type="first_name" name="first_name" placeholder="Владимир" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+                <!-- <br> -->
+                <label for="patronymic">Отчество:</label>
+                <input type="patronymic" name="patronymic" placeholder="Константинович" required size="20" style="font-size: 20px; text-align: center;">
+            
+                <div class="spacer"></div>
+                <!-- <br> -->
+                <label for="email">Корпоративная почта:</label>
+                <input type="email" name="email" placeholder="ivanov.vk@dvfu.ru" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+                <!-- <br> -->
+                <label for="group">Номер группы:</label>
+                <input type="group" name="group" placeholder="Б9122-10.03.01" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+                <!-- <br> -->
+                <label for="teacher">ФИО преподавателя:</label>
+                <input type="teacher" name="teacher" placeholder="Клещева Нелли Александровна" required size="20" style="font-size: 20px; text-align: center;">
+
+                <div class="spacer"></div>
+                <!-- <br> -->
                 <label for="password">Пароль:</label>
-                <input type="dd" name="password" required size="20" style="font-size: 20px; text-align: center;">
+                <input type="password" name="password" id="password-input" placeholder="Введите пароль" required size="20" style="font-size: 20px; text-align: center;">
+                <label style="font-size: 16px; "><input type="checkbox" class="password-checkbox"> Показать пароль</label>
+
+                <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+                <script>
+                $('body').on('click', '.password-checkbox', function(){
+                    if ($(this).is(':checked')){
+                        $('#password-input').attr('type', 'text');
+                    } else {
+                        $('#password-input').attr('type', 'password');
+                    }
+                }); 
+                </script>
                 
                 <div class="spacer"></div>
-
-                <br>
+                <!-- <br> -->
                 <button class="loginButtonSingUp" type="submit">Зарегистрироваться</button>
             </form>
-            <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+            <p>Уже есть аккаунт? <a href="{{ url_for('login') }}" style="color: rgb(108, 253, 86);">Войти</a></p>
         </div>
     </div>
 </body>

@@ -8,12 +8,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
     <script src="static/js/table.js"></script>
-    <link rel="stylesheet" href="static/style/main.css">
+	<!-- <link rel="stylesheet" href="static/style/main.css"> -->
+    <link rel="stylesheet" href="static/style/admin.css">
 </head>
 <body>
     <div class="header">
-        <h2 id="headerMain">Лабораторная работа №1.1 на тему:</h2>
-        <h2 id="headerPreMain">«Определение ускорения свободного падения при помощи математического маятника»</h2>
+        <h1 id="headerMain">Страница админимстратора</h1>
     </div>
 
     <div class="linki">
@@ -23,5 +23,15 @@
         <div class="spacer"></div>
         <a class="hrefL" href="report">Отчет</a>
     </div>
+
+	<h1 class="lableAdmin">YOU ARE AN ADMIN!</h1>
+	<div class="img">
+		<img src="/static/img/kraken.jpg" alt="КРАКЕН">
+		<p>ID: {{ user.id}}</p>
+		<p>Логин: {{ user.username}}</p>
+		<p>Почта: {{ user.email}}</p>
+		<p>Группа: {{ user.group}}</p>
+	</div>
+
 </body>
 </html>

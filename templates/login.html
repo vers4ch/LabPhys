@@ -14,14 +14,11 @@
     <div class="form">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <!-- <ul> -->
                     {% for message in messages %}
-                        <p>{{ message }} <a href="laba">Войти</a></p>
+                        <p style="margin-top: 0; font-size: 20px; color: red;">{{ message }}</p>
                     {% endfor %}
-                <!-- </ul> -->
             {% endif %}
         {% endwith %}
-    <!-- <div class="form"> -->
         <div class="inputs">
             <form class="forma" method="post" action="{{ url_for('login') }}">
                 <label for="username">Имя пользователя:</label>
@@ -31,14 +28,25 @@
 
                 <br>
                 <label for="password">Пароль:</label>
-                <input type="password" name="password" required size="20" style="font-size: 20px; text-align: center;">
+                <input type="password" name="password" id="password-input" placeholder="Введите пароль" required size="20" style="font-size: 20px; text-align: center;">
+                <label style="font-size: 16px; "><input type="checkbox" class="password-checkbox"> Показать пароль</label>
 
-                <div class="spacer"></div>
+                <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+                <script>
+                $('body').on('click', '.password-checkbox', function(){
+                    if ($(this).is(':checked')){
+                        $('#password-input').attr('type', 'text');
+                    } else {
+                        $('#password-input').attr('type', 'password');
+                    }
+                }); 
+                </script>
 
                 <br>
                 <button class="loginButton" type="submit">Войти</button>
             </form>
-            <p>Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+            <p>Нет аккаунта? <a href="{{ url_for('register') }}" style="color: rgb(253, 86, 86);">Зарегистрироваться</a></p>
+            <a href="{{ url_for('reset_password') }}" style="color: rgb(86, 222, 253);">Сбросить логин или пароль</a>
         </div>
     </div>
 </body>

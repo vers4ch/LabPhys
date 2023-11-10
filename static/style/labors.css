@@ -1,0 +1,116 @@
+
+/* st.css */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700; /* Полужирный вес шрифта */
+    src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+    /* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
+h1{
+    margin: 0;
+}
+.header{
+	vertical-align: middle;
+	line-height: 8vh;
+    background-color: #00ADB5;
+	text-align: center;
+    color: #FFFFFF;
+    border-radius: 5px;
+    height: 8vh;
+    width: 100%;
+}
+body{
+    color: #FFFFFF;
+    font-family: 'Lato', sans-serif; 
+    background-color: #222831;
+    margin: 0;
+}
+.spacer{
+    width: 1%;
+}
+
+.linki{
+    margin-top: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4vh;
+}
+
+.hrefL{
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    border: 3px solid #EEEEEE;
+    background-color:#00ADB5;
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    text-decoration: none;
+}
+.hrefL:hover,
+.hrefLA:hover{
+    cursor: pointer;
+    background-color: rgb(88, 146, 178);
+}
+.hrefL:active,
+.hrefLA:active{
+    color: red;
+}
+
+.hrefLA{
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    border: 3px solid #EEEEEE;
+    background-color:rgb(255, 0, 0);
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    text-decoration: none;
+}
+.profile{
+	font-size: 16px; 
+	color: rgb(255, 255, 255);
+}
+.profile:hover{
+	color: yellow;
+}
+
+.labsList {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.labBox{
+	color: #FFFFFF;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding: 3%;
+	margin: 2%;
+	border-radius: 5px;
+	background-color: #393E46;
+}
+.labBox:hover{
+	background-color: #5b626e;
+	/* padding: 4%; */
+	border-radius: 10px;
+
+	
+}

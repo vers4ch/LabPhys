@@ -188,8 +188,8 @@ button {
 
 .linki{
     /* background-color: #393E46; */
-    /* margin-top: -0.5em; */
-    margin-top: 0.5em;
+    margin-top: -0.5em;
+    /* margin-top: 0.5em; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -265,4 +265,12 @@ button {
 	border-radius: 5px;
 	border: 1px solid #999;
 	font-size: 18px;
+}
+
+.profile{
+	font-size: 16px; 
+	color: rgb(255, 255, 255);
+}
+.profile:hover{
+	color: yellow;
 }

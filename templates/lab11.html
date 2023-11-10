@@ -8,21 +8,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
     <script src="static/js/table.js"></script>
-    <link rel="stylesheet" href="static/style/main.css">
+    <link rel="stylesheet" href="static/style/lab11.css">
 </head>
 <body>
     <div class="header">
         <h2 id="headerMain">Лабораторная работа №1.1 на тему:</h2>
         <h2 id="headerPreMain">«Определение ускорения свободного падения при помощи математического маятника»</h2>
+        <!-- <div style="text-align: right; padding-right: 1%;"><a href="{{ url_for('profile') }}" class="profile">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a></div> -->
     </div>
-
+    <div style="text-align: right; padding-right: 1%; padding-bottom: 2%; margin-top: -2%;"><a href="{{ url_for('profile') }}" class="profile">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a></div>
+    <!-- <div> -->
     <div class="linki">
         <a class="hrefL" href="theory">Теория</a>
         <div class="spacer"></div>
-        <a class="hrefL" href="laba">Лаборатория</a>
+        <a class="hrefL" href="laboratories">Лаборатории</a>
         <div class="spacer"></div>
         <a class="hrefL" href="report">Отчет</a>
+        {% if user.is_admin == 1 %}
+            <div class="spacer"></div>
+            <a class="hrefLA" href="admin">Админ</a>
+        {% endif %}
+        <!-- {% if user.is_admin == 0 %}
+            <div class="spacer"></div>
+            <a class="hrefL" href="profile">Профиль</a>
+        {% endif %} -->
     </div>
+    <!-- <a href="{{ url_for('profile') }}" style="font-size: 16px; color: grey;">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a> -->
+    <!-- </div> -->
+
+    <!-- <p style="margin-top: -30px; padding-left: 1200px; color: grey;">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</p> -->
+    <!-- <a href="{{ url_for('profile') }}" style="margin-top: -30px; padding-left: 1200px; color: grey;">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a>
+    <a class="exit" href="{{ url_for('logout') }}">Выход</a> -->
+
 
     <div class="central">
         <div class="lab">
