@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение сброса пароля</title>
+    <link rel="stylesheet" href="static/style/confirm_reset.css">
+</head>
+<body>
+    <div class="head">
+        <h2>Подтверждение сброса пароля</h2>
+    </div>
+
+    <div class="form">
+        <div class="inputs">
+            <form class="forma" action="{{ url_for('confirm_reset') }}" method="post">
+			
+				<label for="confirmation_code">Введите код подтверждения:</label>
+				<div class="spacer"></div>
+				<input type="text" name="confirmation_code" placeholder="Код подтверждения" required size="20" style="font-size: 20px; text-align: center;">
+				<br>
+				<button class="Button" type="submit">Подтвердить</button>
+			</form>
+			{% with messages = get_flashed_messages() %}
+					{% if messages %}
+						{% for message in messages %}
+							<p>{{ message }}</p>
+						{% endfor %}
+					{% endif %}
+       			 {% endwith %}
+        </div>
+    </div>
+</body>
+</html>

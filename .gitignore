@@ -1,2 +1,5 @@
 .vscode/launch.json
 static/js/anima.js.zip
+config.py
+credentials.json
+instance/site.db

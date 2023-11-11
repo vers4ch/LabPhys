@@ -16,7 +16,17 @@
     </div>
 
     <div class="linki">
+        {% if user.is_admin == 1 %}
+            <a class="hrefLA" href="admin">Админ</a>
+            <div class="spacer"></div>
+        {% endif %}
+        {% if user.is_teacher == 1 %}
+            <a class="hrefLA" href="admin">Преподаватель</a>
+            <div class="spacer"></div>
+        {% endif %}
         <a class="hrefL" href="laboratories">Лаборатории</a>
+        <div class="spacer"></div>
+        <a class="hrefExit" href="logout">Выйти</a>
     </div>
 </body>
 </html>

@@ -8,20 +8,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
     <script src="static/js/table.js"></script>
-	<!-- <link rel="stylesheet" href="static/style/main.css"> -->
     <link rel="stylesheet" href="static/style/admin.css">
 </head>
 <body>
     <div class="header">
-        <h1 id="headerMain">Страница админимстратора</h1>
+        <h1 id="headerMain">Страница администратора</h1>
+        <div style="text-align: right; padding-right: 1%; padding-bottom: 5.5vh; margin-top: -5.5vh;"><a href="{{ url_for('profile') }}" class="profile">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a></div>
     </div>
 
     <div class="linki">
-        <a class="hrefL" href="theory">Теория</a>
-        <div class="spacer"></div>
-        <a class="hrefL" href="laba">Лаборатории</a>
-        <div class="spacer"></div>
-        <a class="hrefL" href="report">Отчет</a>
+        <a class="hrefL" href="laboratories">Лаборатории</a>
     </div>
 
 	<h1 class="lableAdmin">YOU ARE AN ADMIN!</h1>

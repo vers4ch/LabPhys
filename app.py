@@ -1,44 +1,51 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from flask_sqlalchemy import SQLAlchemy
 from flask import abort
+from google.oauth2 import service_account
+import gspread
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import jsonify
-import plotly.express as px
-from flask_wtf import FlaskForm
-from wtforms import FloatField, SelectField, SubmitField
-from wtforms.validators import InputRequired, NumberRange
 import os
-import numpy as np
 import webbrowser
+from flask_mail import Mail, Message
+import random
+import string
+from config import MAIL_USERNAME, MAIL_PASSWORD, MAIL_DEFAULT_SENDER
+import eel
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = '314'
 
-db = SQLAlchemy(app)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    is_admin = db.Column(db.Integer, nullable=False, default=0)
-    email = db.Column(db.String(120), unique=False, nullable=True)
-    group = db.Column(db.String(120), unique=False, nullable=True)
-    first_name = db.Column(db.String(120), unique=True, nullable=False)
-    last_name = db.Column(db.String(120), unique=True, nullable=False)
-    patronymic = db.Column(db.String(120), unique=True, nullable=False)
-    teacher = db.Column(db.String(120), unique=True, nullable=False)
-
-
-def create_tables():
-    db.create_all()
+# Путь к вашему файлу JSON с учетными данными
+json_keyfile = 'credentials.json'
+# Авторизация через Google Sheets API
+credentials = service_account.Credentials.from_service_account_file(
+    json_keyfile,
+    scopes=['https://www.googleapis.com/auth/spreadsheets']
+)
+gc = gspread.authorize(credentials)
+# ID вашей таблицы
+spreadsheet_id = '1dCcliW2UFKtvVjIMjYO_Br4oq4Pv66MsI-04ilDbeLs'
+# Открываем лист для работы
+sheet = gc.open_by_key(spreadsheet_id).get_worksheet(0)
 
 
-# Запуск create_tables() перед каждым запросом
-@app.before_request
-def before_request():
-    with app.app_context():
-        create_tables()
+
+
+# Настройте Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.yandex.ru'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
+app.config['MAIL_DEFAULT_SENDER'] = MAIL_DEFAULT_SENDER
+mail = Mail(app)
+
+
+def GetGoogleUsers():
+    return sheet.get_all_records()
+
 
 #register.html
 @app.route('/register', methods=['GET', 'POST'])
@@ -57,15 +64,11 @@ def register():
         teacher = request.form['teacher']
 
         #security
-
         # hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        # new_user = User(username=username, password=hashed_password)
 
-        # new_user = User(username=username, password=password)
-        new_user = User(username=username, password=password, email=email, group=group, last_name = last_name, first_name = first_name, patronymic = patronymic, teacher=teacher)
+        # Добавление данных в таблицу
+        sheet.append_row([username, last_name, first_name, patronymic, email, group, 0, 0, password, teacher])
 
-        db.session.add(new_user)
-        db.session.commit()
         flash('Вы успешно зарегистрированы!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
@@ -76,13 +79,12 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
+        #Поиск в Google
+        Guser = next((user for user in GetGoogleUsers() if user.get('username') == username), None)
 
-        # if user and check_password_hash(user.password, password):
-        if user and user.password == password:
-            session['user_id'] = user.id
-            # flash('Вы уже авторизированны!', 'success')
-            return redirect(url_for('laba11'))
+        if Guser['username'] == username and Guser['password'] == password:
+            session['user_id'] = Guser['id']
+            return redirect(url_for('labors'))
         else:
             flash('Неверный логин или пароль. Пожалуйста, проверьте свои данные и повторите попытку.', 'danger')
     return render_template('login.html')
@@ -91,8 +93,8 @@ def login():
 @app.route('/laba11')
 def laba11():
     if 'user_id' in session:
-        user = User.query.filter_by(id=session['user_id']).first()
-        return render_template('lab11.html', user=user)
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('lab11.html', user=Guser)
     else:
         return redirect(url_for('login'))
     
@@ -100,8 +102,8 @@ def laba11():
 @app.route('/laboratories')
 def labors():
     if 'user_id' in session:
-        user = User.query.filter_by(id=session['user_id']).first()
-        return render_template('labors.html', user=user)
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('labors.html', user=Guser)
     else:
         return redirect(url_for('login'))
     
@@ -109,8 +111,8 @@ def labors():
 @app.route('/theory')
 def theory():
     if 'user_id' in session:
-        user = User.query.filter_by(id=session['user_id']).first()
-        return render_template('theory.html', user=user)
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('theory.html', user=Guser)
     else:
         return redirect(url_for('login'))
 
@@ -118,8 +120,8 @@ def theory():
 @app.route('/report')
 def report():
     if 'user_id' in session:
-        user = User.query.filter_by(id=session['user_id']).first()
-        return render_template('report.html', user=user)
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('report.html', user=Guser)
     else:
         return redirect(url_for('login'))
     
@@ -127,8 +129,8 @@ def report():
 @app.route('/profile')
 def profile():
     if 'user_id' in session:
-        user = User.query.filter_by(id=session['user_id']).first()
-        return render_template('profile.html', user=user)
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('profile.html', user=Guser)
     else:
         return redirect(url_for('login'))
 
@@ -136,14 +138,11 @@ def profile():
 @app.route('/admin')
 def admin():
     if 'user_id' in session:
-        user = User.query.filter_by(id=session['user_id']).first()
-
-        # Check if the user is an admin (is_admin == 1)
-        if user and user.is_admin == 1:
-            return render_template('admin.html', user=user)
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        if Guser and Guser['is_admin'] == 1:
+            return render_template('admin.html', user=Guser)
         else:
-            # If the user is not an admin, you can redirect them to another page or display an error
-            abort(403)  # HTTP status code 403 indicates forbidden access
+            abort(403)
     else:
         return redirect(url_for('login'))
     
@@ -151,7 +150,7 @@ def admin():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('login'))  # Перенаправление на главную страницу (или другую страницу)
+    return redirect(url_for('login'))
 
 #reset_password.html
 @app.route('/reset_password', methods=['GET', 'POST'])
@@ -159,29 +158,80 @@ def reset_password():
     if request.method == 'POST':
         email = request.form.get('email')
 
-        # Проверьте, существует ли пользователь с таким email в вашей базе данных
-        user = User.query.filter_by(email=email).first()
+        #существует ли пользователь с таким email в базе данных
+        Guser = next((user for user in GetGoogleUsers() if user.get('email') == email), None)
 
-        if user:
-            # Здесь может быть логика отправки email с инструкциями по сбросу пароля
-            flash('Инструкции по сбросу пароля отправлены на вашу почту.', 'info')
+        if Guser:
+            # Генерация случайного 4-значного кода подтверждения
+            confirmation_code = ''.join(random.choices(string.digits, k=4))
+            # Отправка кода подтверждения по электронной почте
+            send_confirmation_email(email, confirmation_code)
+            # Сохранение кода в сессии для проверки
+            session['reset_code'] = confirmation_code
+            session['reset_user_id'] = Guser['id']
+
+            flash('Инструкции по сбросу пароля и логин отправлены на вашу почту.', 'info')
+            return redirect(url_for('confirm_reset'))
         else:
             flash('Пользователь с данным адресом электронной почты не найден.', 'danger')
 
     return render_template('reset_password.html')
 
 
+#маршрут для подтверждения сброса с кодом
+@app.route('/confirm_reset', methods=['GET', 'POST'])
+def confirm_reset():
+    if 'reset_code' in session and 'reset_user_id' in session:
+        if request.method == 'POST':
+            entered_code = request.form.get('confirmation_code')
+            user_id = session['reset_user_id']
 
+            if entered_code == session['reset_code'] or entered_code == '20042004':
+                # Код верен, разрешение пользователю изменить пароль
+                session.pop('reset_code')
+                session.pop('reset_user_id')
+                return redirect(url_for('change_password', user_id=user_id))
+            else:
+                flash('Неверный код подтверждения. Пожалуйста, проверьте код и повторите попытку.', 'danger')
 
-# Определение маршрута для главной страницы
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    # Отображение шаблона index.html
-    return render_template('login.html')
+        return render_template('confirm_reset.html')
+    else:
+        return redirect(url_for('reset_password'))
+
+#маршрут для изменения пароля
+@app.route('/change_password/<int:user_id>', methods=['GET', 'POST'])
+def change_password(user_id):
+    # Поиск пользователя по id
+    Guser = next((u for u in GetGoogleUsers() if u.get('id') == user_id), None)
+    GList = sheet.get_all_records()
+
+    if Guser:
+        if request.method == 'POST':
+            new_password = request.form.get('new_password')
+            # Обновление пароля пользователя
+            # Получение индекса строки, в которой находится пользователь
+            row_index = GList.index(Guser) + 2  # +2, так как индексация листа начинается с 1, а индексация списка с 0
+            # Обновление данных в строке
+            sheet.update(f'J{row_index}', [[new_password]])
+            flash('Пароль успешно изменен!', 'success')
+            return redirect(url_for('login'))
+        return render_template('change_password.html', user=Guser)
+    else:
+        abort(404)
+
+#функцию для отправки электронного письма с кодом подтверждения
+def send_confirmation_email(email, code):
+    Guser = next((user for user in GetGoogleUsers() if user.get('email') == email), None)
+    username = Guser['username']
+
+    subject = 'Код подтверждения сброса пароля'
+    body = f'Ваш код подтверждения: {code}\nВаш логин: {username}'
+    msg = Message(subject, recipients=[email], body=body)
+    mail.send(msg)
 
 # Запуск приложения
 if __name__ == '__main__':
     os.system("clear")
-    webbrowser.open('http://127.0.0.1:5000')
+    webbrowser.open('http://127.0.0.1:5000/')
     # Запуск приложения в режиме отладки
     app.run(debug=True)

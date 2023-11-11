@@ -15,19 +15,18 @@
     /* Замените на ссылку на шрифт с CDN, если используете CDN */
 }
 
-h2{
+h1{
     margin: 0;
 }
 .header{
+	vertical-align: middle;
+	line-height: 8vh;
     background-color: #00ADB5;
+	text-align: center;
     color: #FFFFFF;
     border-radius: 5px;
     height: 8vh;
     width: 100%;
-}
-#headerMain{
-    padding-left: 20px;
-    padding-top: 10px;
 }
 body{
     color: #FFFFFF;
@@ -39,9 +38,7 @@ body{
     width: 1%;
 }
 
-
 .linki{
-    /* background-color: #393E46; */
     margin-top: 0.5em;
     display: flex;
     justify-content: center;
@@ -85,22 +82,36 @@ body{
     width: 15%;
     text-decoration: none;
 }
-
-.exit{
-    padding-left: 1200px;
-    margin-bottom: 20px;
-    color: #a78080;
-    font-size: 11px;
-    text-transform: uppercase;
-    text-decoration: none;
+.profile{
+	font-size: 16px; 
+	color: rgb(255, 255, 255);
 }
-.exit:hover{
-    cursor: pointer;
-    color: red;
+.profile:hover{
+	color: yellow;
 }
 
-h1{
-    margin: 0;
+.labsList {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.labBox{
+	color: #FFFFFF;
+	text-transform: uppercase;
+	text-decoration: none;
+	padding: 3%;
+	margin: 2%;
+	border-radius: 5px;
+	background-color: #393E46;
+}
+.labBox:hover{
+	background-color: #5b626e;
+	/* padding: 4%; */
+	border-radius: 10px;
+
+	
 }
 
 .lableAdmin{
