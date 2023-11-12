@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_file, make_response
 from flask import abort
 from google.oauth2 import service_account
 import gspread
@@ -10,6 +10,11 @@ import random
 import string
 from config import MAIL_USERNAME, MAIL_PASSWORD, MAIL_DEFAULT_SENDER
 import eel
+from docxtpl import DocxTemplate, InlineImage
+from docx.shared import Mm
+import plotly.express as px
+from docx import Document
+from io import BytesIO
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -84,6 +89,12 @@ def login():
 
         if Guser['username'] == username and Guser['password'] == password:
             session['user_id'] = Guser['id']
+            session['first_name'] = Guser['first_name']
+            session['last_name'] = Guser['last_name']
+            session['patronymic'] = Guser['patronymic']
+            session['teacher'] = Guser['teacher']
+            session['group'] = Guser['group']
+
             return redirect(url_for('labors'))
         else:
             flash('Неверный логин или пароль. Пожалуйста, проверьте свои данные и повторите попытку.', 'danger')
@@ -145,7 +156,89 @@ def admin():
             abort(403)
     else:
         return redirect(url_for('login'))
-    
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/generate_report', methods=['POST'])
+def generate_report():
+    # Получаем данные из запроса
+    data = request.json
+
+    goal = data.get('goal')
+    output = data.get('output')
+    table_data = data.get('tableData')
+    name = session['last_name'] + ' ' + session['first_name'] + ' ' + session['patronymic']
+    teacher = session['teacher']
+    group = session['group']
+
+    gravity = float([item['gravity'] for item in table_data if item['number'] == '1'][0])
+    averageTime = float([item['averageTime'] for item in table_data if item['number'] == '1'][0])
+
+    labels = [float(row['length']) for row in table_data]
+    data_values = [float(row['time'])**2 for row in table_data]
+    # Строим график с использованием Plotly
+    fig = px.line(x=labels, y=data_values, labels={'x': 'Длина нити, L', 'y': 'Квадрат периода, T²'},
+                  title='График зависимости квадрата периода от длины нити')
+    # Добавляем точки и устанавливаем цвет маркеров в красный
+    fig.update_traces(mode='markers+lines', marker=dict(color='red'))
+    # Увеличиваем размер шрифта на осях
+    fig.update_layout(
+        title_font=dict(size=36),  # размер шрифта для заголовка
+        xaxis=dict(title_font=dict(size=32), tickfont=dict(size=21)),  # размер шрифта для оси X
+        yaxis=dict(title_font=dict(size=32), tickfont=dict(size=21))   # размер шрифта для оси Y
+    )
+    # Сохранение графика в формате PNG
+    fig.write_image("img.png", width=2048, height=1024)
+
+
+    # Ваш код для создания отчета с использованием данных
+    doc = DocxTemplate("static/documents/laba11.docx")
+    imagen = InlineImage(doc, 'img.png', width=Mm(174)) # width is in millimetres
+    context = {'name': name, 
+               'group': group, 
+               'teacher': teacher, 
+               'goal' : goal,
+               'l1': float([item['length'] for item in table_data if item['number'] == '1'][0]),
+               'l2': float([item['length'] for item in table_data if item['number'] == '2'][0]),
+               'l3': float([item['length'] for item in table_data if item['number'] == '3'][0]),
+               'l4': float([item['length'] for item in table_data if item['number'] == '4'][0]),
+               'l5': float([item['length'] for item in table_data if item['number'] == '5'][0]),
+
+               't1': float([item['time'] for item in table_data if item['number'] == '1'][0]),
+               't2': float([item['time'] for item in table_data if item['number'] == '2'][0]),
+               't3': float([item['time'] for item in table_data if item['number'] == '3'][0]),
+               't4': float([item['time'] for item in table_data if item['number'] == '4'][0]),
+               't5': float([item['time'] for item in table_data if item['number'] == '5'][0]),
+               'averageTime': averageTime,
+               'gravity': gravity,
+               'img': imagen, 
+               'output': output}
+    doc.render(context)
+    # doc.save("output11.docx")
+    # Сохраняем документ в BytesIO
+    doc_bytes = BytesIO()
+    doc.save(doc_bytes)
+    doc_bytes.seek(0)
+
+    # Create a response object
+    response = make_response(send_file(doc_bytes, download_name='output11.docx', as_attachment=True))
+
+    # Set content type explicitly
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+    # Optional: Set additional headers if needed (e.g., Cache-Control)
+
+    # Return the response
+    return response, 200
+
 
 @app.route('/logout')
 def logout():
@@ -232,6 +325,6 @@ def send_confirmation_email(email, code):
 # Запуск приложения
 if __name__ == '__main__':
     os.system("clear")
-    webbrowser.open('http://127.0.0.1:5000/')
+    # webbrowser.open('http://127.0.0.1:5000/')
     # Запуск приложения в режиме отладки
-    app.run(debug=True)
+    app.run(debug=True, port=5002)

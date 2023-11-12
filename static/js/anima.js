@@ -73,7 +73,8 @@ function mouseDragged() {
   if (
 	mouseY > 0 &&
 	mouseY < 430-length*3 &&
-	mouseY < 270
+	mouseY < 270 &&
+	mouseX < 350
   ) {
 	plankY += deltaY/3;
 	prevMouseY = mouseY;
