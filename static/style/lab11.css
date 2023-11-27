@@ -131,7 +131,8 @@ p{
 
 .container {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: space-around;
     /* background-color: #ce2929; */
 }
 .graph-container{

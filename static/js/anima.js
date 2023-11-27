@@ -10,6 +10,7 @@ let length;
 let angle = 0;
 let n;
 let start = false;
+let randomError = 0;
 
 function preload() {
   backgroundImage = loadImage('static/img/pendMain.png');
@@ -98,6 +99,10 @@ class Pendulum {
 	this.dampingFactor = 1.0;
 	this.airResistance = 0.0;
 	this.gravity = 9.80665;
+
+	// Генерируем случайное число в диапазоне от -0.1 до 0.1 (например)
+	randomError = (Math.random() - 0.5) * 0.46; // Измените 0.2 на желаемую амплитуду погрешности
+	// console.log(randomError);
   }
 
   update() {
@@ -110,26 +115,13 @@ class Pendulum {
 				setTimeout(() => {
 					displayText = true;
 				}, period*1000/1.3);
-			// }, period*1000/1.4);
 			}
 	}
 	
-
-	// if( this.position.y + plankY > 107 && 
-	// 	this.position.y + plankY < 120){
-	// 		if(degrees(this.angle) < 1 && degrees(this.angle) > -1){
-	// 			// console.log("Angle = 0");
-	// 			n++;
-	// 			// console.log("n ==", n);
-	// 			if(n == 6){
-	// 				// console.log("n > 5");
-	// 				displayText = true;
-	// 			}
-	// 		}
-	// }
+	//ЗДЕСЬ ДОБАВИТЬ ПОГРЕШНОСТЬ
 
 
-	const actualPeriod = (2 * Math.PI * Math.sqrt(this.armLength / this.gravity)) / 10.0;
+	const actualPeriod = (2 * Math.PI * Math.sqrt(this.armLength / this.gravity) + randomError) / 10.0;
 	period = actualPeriod;
 
 	const TIME_STEPS_PER_SECOND = 60;

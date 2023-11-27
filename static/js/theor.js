@@ -53,19 +53,23 @@ function generateReport() {
     // Собираем данные из полей ввода
     var goal = document.getElementById('goal-input').value;
     var output = document.getElementById('output-input').value;
+    var theor = document.getElementById('theor-input').value;
 
     // Собираем данные из таблицы (пример)
     var tableData = [];
-    var tableRows = document.getElementById('data-table').getElementsByTagName('tr');
-    for (var i = 1; i < tableRows.length; i++) {
-        var cells = tableRows[i].getElementsByTagName('td');
-        tableData.push({
-            number: cells[0].innerText,
-            length: cells[1].innerText,
-            time: cells[2].innerText,
-			averageTime: document.querySelector('#data-table tbody td[rowspan]').innerText,
-            gravity: document.querySelector('#data-table tbody td[rowspan] + td').innerText
-        });
+    var table = document.getElementById('data-table');
+    var data = [];
+
+    // Iterate through rows and cells to collect data
+    for (var i = 1; i < table.rows.length; i++) {
+        var row = table.rows[i];
+        var rowData = [];
+
+        for (var j = 0; j < row.cells.length; j++) {
+            rowData.push(row.cells[j].innerText);
+        }
+
+        data.push(rowData);
     }
 
     // Отправляем AJAX запрос на сервер Flask
@@ -77,7 +81,9 @@ function generateReport() {
         body: JSON.stringify({
             goal: goal,
             output: output,
-            tableData: tableData
+            theor: theor,
+            tableData: data
+            // tableData: tableData
         }),
     })
     .then(response => {

@@ -9,7 +9,6 @@ from flask_mail import Mail, Message
 import random
 import string
 from config import MAIL_USERNAME, MAIL_PASSWORD, MAIL_DEFAULT_SENDER
-import eel
 from docxtpl import DocxTemplate, InlineImage
 from docx.shared import Mm
 import plotly.express as px
@@ -17,20 +16,36 @@ from docx import Document
 from io import BytesIO
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = '314'
 
 
-# Путь к вашему файлу JSON с учетными данными
-json_keyfile = 'credentials.json'
-# Авторизация через Google Sheets API
-credentials = service_account.Credentials.from_service_account_file(
-    json_keyfile,
+# Учетные данные в формате JSON
+credentials_json = {
+  "type": "service_account",
+  "project_id": "labphys",
+  "private_key_id": "c925e28a1ae4e0c844dfb0413c862bdc7adc7477",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCrZF9NsDJ8cjYq\ngGEFy3W8GmKikLa9imN/aC5XeTzEREQN6Q1vC1rFrksL90/gxfHH5lRxBeJOU0QL\nk4nxY+kJ7+g4+FL8Y8O5Q//FwjLDzrWCWCx4miCRS+kDPgakxYciuPbN4ivMf2FN\n9nszJHSBqK7FQXRHRhZ7Up1WCT2cSbdT7PITtAJ+4vwJyZXJvqJR5jiYCHQeVdu5\nc8bHP5/v4meqlXcWZ7iansDK/Fd5vcFsnUCXoKtuHomeh6dj6DP0N8rXSaZtGt0L\nrL+AggpJ4VBsVE8nREWi+d4xszVU6tK9qHxA2HxJNPyP9BxbY+DMvFLbiDIVlqse\nuRYHBLAhAgMBAAECggEABVz08X6luciuIrrVLmP9OWde9kTOfxRdRC+boZ+Y0/Bp\n68CC69pgWwa28Pcqb/dpty5hLo83U2meG7mga6YLdQTlkKDOofiyN3ImBwdqZL+r\nZNqC+7wg8EL+ldwjQ5UtwxukF3GwGqxSvGiN1t4ZajQ/0crYS2GpUu8VHsvXunPz\n6EA78j3uxS2tSg1iPb8n7nxQ624GzfJrDZ3k83YH877vMHNcFFCPtgtr1D948gyX\nxwXCkiFGiFyUCj7Bw+aksXthSP3zLWdsgR7ZblJHhm/sFzsml3o6xGymwITDOmkF\nwomyDQKg2g77kK+w5vcXLlmTAddN8KeKdAMPaZA6BQKBgQDk3OUmPAYdjCNfbjGE\nxdGiaODgCiggFOpC9fOgjE33zWGjbxbUS8Z7cxICgsFHcjITsykkHb8uJD+wgISw\nCgu3IULAzSgg6fbLuV+u5VKx08dgDQk0HhJu0MhbiwTGAk+M9o+pwj+opu06bb5E\ncaj1Iu2qgYxhsD78KNtHEevQvQKBgQC/tvVL5G1iu/QjldyAGZDZ4Y/77dkPCfxH\nBnrN5e9zq60/BPfQLXLETbNlCX76fkGkuNseFNki9Iih5qR/fgL8kwiqvvvVDHme\n2Du07Txo4YayF8v0al4nwXHe4Ym8CrP31/R0KHC11osXB57JAdrcARh7jBidgCcU\nOV4tQLptNQKBgEJJkL2ASS0pt90eJ42TVmK6CdgaWQDhzfBTGJt5x+NsQ0l5FZ2r\nzPNYovDDOoQdGVAHZnUlgIg2y5OtxcDPSBFkutbpFSRjX64mJQadOVR0SJ0TaYUE\n6MXcBwwsudc4OB5WE8pRjuqkXrW7r45XdV57HWdzWlu5FqUmmEx/blPpAoGAHiUl\nov5TGOBW/jV1S4s5lJj8K+/1XoECcySYsMGEClsnTa55TPmofyd8mtmIZtjtd3o9\nshgzIGT1CwgaO5XT4GU6SqbnMFPa19hGYyeehRtZM628Oz1yeqvXPOWX48KHE+SY\nIp+tQVpv2novRIoPIOLnN54KzNE2095FabYw2jUCgYEA5CcfIyhXZ/bR5JJBdLrv\nlAlK6bk9AFNRHfpCz88ayfUdwWYexomiQliFdt9+wRzAFaVOr/YybntHw6+nBZb5\nawjWE104wNjBGUrU1g8s5HtGFvToK1tueWZy8D45NSNOSduYCN7FgOZ/M2HyXjMi\nCLAz5zbpnM43TmyKdqRQKLQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "versach@labphys.iam.gserviceaccount.com",
+  "client_id": "101984763976201259861",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/versach%40labphys.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+# Авторизация через Google Sheets API с использованием учетных данных
+credentials = service_account.Credentials.from_service_account_info(
+    credentials_json,
     scopes=['https://www.googleapis.com/auth/spreadsheets']
 )
+
 gc = gspread.authorize(credentials)
+
 # ID вашей таблицы
 spreadsheet_id = '1dCcliW2UFKtvVjIMjYO_Br4oq4Pv66MsI-04ilDbeLs'
+
+
 # Открываем лист для работы
 sheet = gc.open_by_key(spreadsheet_id).get_worksheet(0)
 
@@ -118,23 +133,23 @@ def labors():
     else:
         return redirect(url_for('login'))
     
-#theory.html
-@app.route('/theory')
-def theory():
-    if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        return render_template('theory.html', user=Guser)
-    else:
-        return redirect(url_for('login'))
+# #theory.html
+# @app.route('/theory')
+# def theory():
+#     if 'user_id' in session:
+#         Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+#         return render_template('theory.html', user=Guser)
+#     else:
+#         return redirect(url_for('login'))
 
-#report.html
-@app.route('/report')
-def report():
-    if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        return render_template('report.html', user=Guser)
-    else:
-        return redirect(url_for('login'))
+# #report.html
+# @app.route('/report')
+# def report():
+#     if 'user_id' in session:
+#         Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+#         return render_template('report.html', user=Guser)
+#     else:
+#         return redirect(url_for('login'))
     
 #profile.html
 @app.route('/profile')
@@ -156,7 +171,18 @@ def admin():
             abort(403)
     else:
         return redirect(url_for('login'))
-
+    
+#teacher
+@app.route('/teacher')
+def teacher():
+    if 'user_id' in session:
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        if Guser and Guser['is_admin'] == 1:
+            return render_template('admin.html', user=Guser)
+        else:
+            abort(403)
+    else:
+        return redirect(url_for('login'))
 
 
 
@@ -171,55 +197,71 @@ def admin():
 def generate_report():
     # Получаем данные из запроса
     data = request.json
+    table_data = request.get_json()
+    # print("Received data:", table_data)
 
-    goal = data.get('goal')
-    output = data.get('output')
-    table_data = data.get('tableData')
+    # здесь вы можете добавить код для обработки полученных данных
+    goal = table_data['goal']
+    theor = table_data['theor']
+    output = table_data['output']
+    table = table_data['tableData']
+
     name = session['last_name'] + ' ' + session['first_name'] + ' ' + session['patronymic']
     teacher = session['teacher']
     group = session['group']
 
-    gravity = float([item['gravity'] for item in table_data if item['number'] == '1'][0])
-    averageTime = float([item['averageTime'] for item in table_data if item['number'] == '1'][0])
-
-    labels = [float(row['length']) for row in table_data]
-    data_values = [float(row['time'])**2 for row in table_data]
-    # Строим график с использованием Plotly
-    fig = px.line(x=labels, y=data_values, labels={'x': 'Длина нити, L', 'y': 'Квадрат периода, T²'},
-                  title='График зависимости квадрата периода от длины нити')
-    # Добавляем точки и устанавливаем цвет маркеров в красный
-    fig.update_traces(mode='markers+lines', marker=dict(color='red'))
-    # Увеличиваем размер шрифта на осях
-    fig.update_layout(
-        title_font=dict(size=36),  # размер шрифта для заголовка
-        xaxis=dict(title_font=dict(size=32), tickfont=dict(size=21)),  # размер шрифта для оси X
-        yaxis=dict(title_font=dict(size=32), tickfont=dict(size=21))   # размер шрифта для оси Y
-    )
-    # Сохранение графика в формате PNG
-    fig.write_image("img.png", width=2048, height=1024)
-
-
     # Ваш код для создания отчета с использованием данных
     doc = DocxTemplate("static/documents/laba11.docx")
-    imagen = InlineImage(doc, 'img.png', width=Mm(174)) # width is in millimetres
     context = {'name': name, 
                'group': group, 
                'teacher': teacher, 
                'goal' : goal,
-               'l1': float([item['length'] for item in table_data if item['number'] == '1'][0]),
-               'l2': float([item['length'] for item in table_data if item['number'] == '2'][0]),
-               'l3': float([item['length'] for item in table_data if item['number'] == '3'][0]),
-               'l4': float([item['length'] for item in table_data if item['number'] == '4'][0]),
-               'l5': float([item['length'] for item in table_data if item['number'] == '5'][0]),
+               'theor': theor,
 
-               't1': float([item['time'] for item in table_data if item['number'] == '1'][0]),
-               't2': float([item['time'] for item in table_data if item['number'] == '2'][0]),
-               't3': float([item['time'] for item in table_data if item['number'] == '3'][0]),
-               't4': float([item['time'] for item in table_data if item['number'] == '4'][0]),
-               't5': float([item['time'] for item in table_data if item['number'] == '5'][0]),
-               'averageTime': averageTime,
-               'gravity': gravity,
-               'img': imagen, 
+                'l11': table[0][2],
+                'l12': table[1][1],
+                'l13': table[2][1],
+                'l14': table[3][1],
+                'l15': table[4][1],
+
+                't11': table[0][3],
+                't12': table[1][2],
+                't13': table[2][2],
+                't14': table[3][2],
+                't15': table[4][2],
+                'averageTime1': table[0][4],
+                'gravity1': table[0][5],
+
+
+                'l21': table[5][2],
+                'l22': table[6][1],
+                'l23': table[7][1],
+                'l24': table[8][1],
+                'l25': table[9][1],
+
+                't21': table[5][3],
+                't22': table[6][2],
+                't23': table[7][2],
+                't24': table[8][2],
+                't25': table[9][2],
+                'averageTime2': table[5][4],
+                'gravity2': table[5][5],
+
+
+                'l31': table[10][2],
+                'l32': table[11][1],
+                'l33': table[12][1],
+                'l34': table[13][1],
+                'l35': table[14][1],
+
+                't31': table[10][3],
+                't32': table[11][2],
+                't33': table[12][2],
+                't34': table[13][2],
+                't35': table[14][2],
+                'averageTime3': table[10][4],
+                'gravity3': table[10][5],
+
                'output': output}
     doc.render(context)
     # doc.save("output11.docx")
@@ -233,8 +275,6 @@ def generate_report():
 
     # Set content type explicitly
     response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-
-    # Optional: Set additional headers if needed (e.g., Cache-Control)
 
     # Return the response
     return response, 200
