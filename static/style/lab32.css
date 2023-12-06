@@ -1,0 +1,390 @@
+/* st.css */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400; /* Обычный вес шрифта */
+    src: local('Lato Regular'), local('Lato-Regular'), url(fonts/Lato-Regular.woff2) format('woff2');
+    /* Если используете CDN, то можете заменить "url(path/to/lato.woff2)" на ссылку на шрифт с CDN */
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700; /* Полужирный вес шрифта */
+    src: local('Lato Bold'), local('Lato-Bold'), url(fonts/Lato-Bold.woff2) format('woff2');
+    /* Замените на ссылку на шрифт с CDN, если используете CDN */
+}
+
+h2{
+    margin: 0;
+}
+
+.createGraph{
+    color: #FFFFFF;
+    border-radius: 4px;
+    border: 3px solid #EEEEEE;
+    background-color: #00ADB5;
+}
+.createGraph:hover{
+    background-color: rgb(112, 178, 182);
+    cursor: pointer;
+}
+.header{
+    background-color: #00ADB5;
+    color: #FFFFFF;
+    border-radius: 5px;
+    height: 11vh;
+    width: 100%;
+}
+#headerMain{
+    padding-left: 20px;
+    padding-top: 10px;
+}
+#headerPreMain{
+    margin-top: 10px;
+    padding-left: 20px;
+}
+body{
+    color: #FFFFFF;
+    font-family: 'Lato', sans-serif; 
+    background-color: #222831;
+    margin: 0;
+}
+
+.lab{
+    /* padding-top: 1vh; */
+    /* margin-left: 10px; */
+    width: 80%; /* Ширина блоков (оставлено пространство для отступов) */
+    /* background-color: rebeccapurple; */
+}
+
+
+.field{
+    height: 10vh;
+}
+p{
+    margin: 0;
+}
+.center-text{
+    text-align: center;
+    padding: 2px;
+}
+
+.fieldForm{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    height: 70%;
+    font-size: 20px;
+    
+}
+
+.formLength,
+.formAngle{
+    border-radius: 5px;
+    background-color: #393E46;
+    width: 40%;
+    margin: 0;
+}
+.spacer{
+    width: 1%;
+}
+.formButton{
+    color: white;
+    width: 5%;
+    height: 100%;
+    border-radius: 4px;
+    border: 3px solid #EEEEEE;
+    background-color: #00ADB5;
+}
+
+.formButton:hover{
+    background-color: red;
+    cursor: pointer;
+}
+
+.lengthInpt, 
+.angleInpt{
+    text-align: center;
+    padding: 2vh;
+    
+}
+
+.container {
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: space-around;
+    /* background-color: #ce2929; */
+}
+.graph-container{
+    padding-top: 1vh;
+    width: 50%; /* Ширина блоков (оставлено пространство для отступов) */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+/* Добавляем стили для рамок вокруг ячеек таблицы */
+table {
+    border-collapse: collapse;
+    border: 1px solid red;
+    border-radius: 15px;
+    width: 95%;
+    margin: 10px; /* Отступ снизу таблицы */
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+td[contenteditable="true"] {
+    color: #9d9d9d;
+}
+
+td[contenteditable="false"] {
+    color: #ffffff;
+}
+
+button {
+    margin-bottom: 10px; /* Отступ между кнопками и канвой */
+}
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px; /* Добавленный отступ для разделения кнопок от таблицы */
+}
+
+.linki{
+    /* background-color: #393E46; */
+    margin-top: -0.5em;
+    /* margin-top: 0.5em; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 4vh;
+}
+
+.hrefL{
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    border: 3px solid #EEEEEE;
+    background-color:#00ADB5;
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    text-decoration: none;
+}
+.hrefL:hover,
+.hrefLA:hover{
+    cursor: pointer;
+    background-color: rgb(88, 146, 178);
+}
+.hrefL:active,
+.hrefLA:active{
+    color: red;
+}
+
+.hrefLA{
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    border: 3px solid #EEEEEE;
+    background-color:rgb(255, 0, 0);
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    text-decoration: none;
+}
+
+.exit{
+    /* margin-top: -30px; */
+    /* padding-left: 25px; */
+    padding-left: 1200px;
+    margin-bottom: 20px;
+    color: #a78080;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.exit:hover{
+    cursor: pointer;
+    color: red;
+}
+
+
+
+.password {
+	width: 300px;
+	margin: 0 auto;
+	padding: 15px;
+}
+#password-input {
+	width: 100%;
+	padding: 5px 0;
+	height: 30px;
+	line-height: 40px;
+	text-indent: 10px;
+	margin: 0 0 15px 0;
+	border-radius: 5px;
+	border: 1px solid #999;
+	font-size: 18px;
+}
+
+.profile{
+	font-size: 16px; 
+	color: rgb(255, 255, 255);
+}
+.profile:hover{
+	color: yellow;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000; /* Устанавливаем высокий z-index */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    /* overflow: auto; */
+    color: #222831;
+    margin: 2% auto;
+    /* height: 80%; */
+    padding: 20px;
+    /* border: 3px solid rgb(34, 34, 62); */
+    border-radius: 10px;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.report{
+    display: flex;
+    /* justify-content: flex-start; */
+    /* flex-wrap: nowrap; */
+    flex-direction: row;
+    width: 100%;
+}
+.mainReport{
+    width: 50%;
+}
+.theorReport{
+    width: 50%;
+}
+h4{
+    margin: 0%;
+}
+
+.downloadReport{
+    font-size: 16px;
+    margin: 10px auto;
+    /* padding: 20px auto; */
+    width: 30%;
+    height: 10%;
+    border-radius: 4px;
+    color: white;
+    border: 3px solid #727272;
+    background-color: #00ADB5;
+}
+.downloadReport:hover{
+    cursor: pointer;
+}
+
+#app {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#app button, input, div {
+    margin: 10px;
+}
+
+
+
+
+
+.central{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.main{
+    margin: 0;
+    display: flex;
+    width: 80%;
+    /* background-color: rebeccapurple; */
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+
+.animation-container {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
+}
+.tables{
+    display: flex;
+    width: 60%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    background-color: #393E46;
+    justify-content: center;
+    align-items: center;
+}
+.table-body{
+    height: 90%;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.chater{
+    width: 20%;
+}
+
+
+.ch1{
+    border-radius: 10px;
+    background-color: #393E46;
+    height: 8vh;
+    margin-top: 7px;
+    margin-bottom: 10px;
+}
+.ch2{
+    height: 550px;
+    border-radius: 10px;
+    background-color: #393E46;
+}

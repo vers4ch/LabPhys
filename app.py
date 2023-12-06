@@ -67,6 +67,22 @@ def GetGoogleUsers():
     return sheet.get_all_records()
 
 
+
+def get_last_numeric_value(column_index):
+
+    # Получаем все значения из столбца
+    column_values = sheet.col_values(column_index)
+
+    # Ищем последнее численное значение в обратном порядке
+    for value in reversed(column_values):
+        try:
+            numeric_value = float(value)
+            return numeric_value
+        except ValueError:
+            pass  # Пропускаем значения, которые не могут быть преобразованы в число
+
+    return None  # Если нет численных значений
+
 #register.html
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -86,8 +102,14 @@ def register():
         #security
         # hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
-        # Добавление данных в таблицу
-        sheet.append_row([username, last_name, first_name, patronymic, email, group, 0, 0, password, teacher])
+        # Добавление данных в таблицу c функцией автоинкремента
+        data_to_insert = [get_last_numeric_value(1)+1, username, last_name, first_name, patronymic, email, group, 0, 0, password, teacher]
+        # Получение данных из столбца B
+        column_b_data = sheet.col_values(2)
+        # Нахождение первой пустой строки в столбце B
+        row_number = len(column_b_data) + 1
+        # Вставка данных в найденную строку
+        sheet.insert_row(data_to_insert, row_number)
 
         flash('Вы успешно зарегистрированы!', 'success')
         return redirect(url_for('login'))
@@ -124,6 +146,20 @@ def laba11():
     else:
         return redirect(url_for('login'))
     
+
+
+#lab32.html
+@app.route('/laba32')
+def laba32():
+    if 'user_id' in session:
+        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('lab32.html', user=Guser)
+    else:
+        return redirect(url_for('login'))
+    
+
+
+    
 #labors.html
 @app.route('/laboratories')
 def labors():
@@ -133,23 +169,7 @@ def labors():
     else:
         return redirect(url_for('login'))
     
-# #theory.html
-# @app.route('/theory')
-# def theory():
-#     if 'user_id' in session:
-#         Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-#         return render_template('theory.html', user=Guser)
-#     else:
-#         return redirect(url_for('login'))
 
-# #report.html
-# @app.route('/report')
-# def report():
-#     if 'user_id' in session:
-#         Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-#         return render_template('report.html', user=Guser)
-#     else:
-#         return redirect(url_for('login'))
     
 #profile.html
 @app.route('/profile')
@@ -205,6 +225,7 @@ def generate_report():
     theor = table_data['theor']
     output = table_data['output']
     table = table_data['tableData']
+    print(table)
 
     name = session['last_name'] + ' ' + session['first_name'] + ' ' + session['patronymic']
     teacher = session['teacher']
@@ -219,46 +240,46 @@ def generate_report():
                'theor': theor,
 
                 'l11': table[0][2],
-                'l12': table[1][1],
-                'l13': table[2][1],
-                'l14': table[3][1],
-                'l15': table[4][1],
+                # 'l12': table[1][1],
+                # 'l13': table[2][1],
+                # 'l14': table[3][1],
+                # 'l15': table[4][1],
 
                 't11': table[0][3],
-                't12': table[1][2],
-                't13': table[2][2],
-                't14': table[3][2],
-                't15': table[4][2],
+                't12': table[1][1],
+                't13': table[2][1],
+                't14': table[3][1],
+                't15': table[4][1],
                 'averageTime1': table[0][4],
                 'gravity1': table[0][5],
 
 
                 'l21': table[5][2],
-                'l22': table[6][1],
-                'l23': table[7][1],
-                'l24': table[8][1],
-                'l25': table[9][1],
+                # 'l22': table[6][1],
+                # 'l23': table[7][1],
+                # 'l24': table[8][1],
+                # 'l25': table[9][1],
 
                 't21': table[5][3],
-                't22': table[6][2],
-                't23': table[7][2],
-                't24': table[8][2],
-                't25': table[9][2],
+                't22': table[6][1],
+                't23': table[7][1],
+                't24': table[8][1],
+                't25': table[9][1],
                 'averageTime2': table[5][4],
                 'gravity2': table[5][5],
 
 
                 'l31': table[10][2],
-                'l32': table[11][1],
-                'l33': table[12][1],
-                'l34': table[13][1],
-                'l35': table[14][1],
+                # 'l32': table[11][1],
+                # 'l33': table[12][1],
+                # 'l34': table[13][1],
+                # 'l35': table[14][1],
 
                 't31': table[10][3],
-                't32': table[11][2],
-                't33': table[12][2],
-                't34': table[13][2],
-                't35': table[14][2],
+                't32': table[11][1],
+                't33': table[12][1],
+                't34': table[13][1],
+                't35': table[14][1],
                 'averageTime3': table[10][4],
                 'gravity3': table[10][5],
 
@@ -278,6 +299,86 @@ def generate_report():
 
     # Return the response
     return response, 200
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/generate_report32', methods=['POST'])
+def generate_report32():
+    # Получаем данные из запроса
+    table_data = request.get_json()
+    # print("Received data:", table_data)
+
+    # здесь вы можете добавить код для обработки полученных данных
+    goal = table_data['goal']
+    theor = table_data['theor']
+    output = table_data['output']
+    table = table_data['tableData']
+    print(table)
+
+    name = session['last_name'] + ' ' + session['first_name'] + ' ' + session['patronymic']
+    teacher = session['teacher']
+    group = session['group']
+
+    # Ваш код для создания отчета с использованием данных
+    doc = DocxTemplate("static/documents/laba322.docx")
+    context = {'name': name, 
+               'group': group, 
+               'teacher': teacher, 
+               'goal' : goal,
+               'theor': theor,
+
+                'l1': table[0][1],    
+                'u11': table[0][2], 'i11': table[0][3], 'uu11': table[0][4], 'ui11': table[0][5], 'ii11': table[0][6],
+                'u12': table[1][1], 'i12': table[1][2], 'uu12': table[1][3], 'ui12': table[1][4], 'ii12': table[1][5],
+                'u13': table[2][1], 'i13': table[2][2], 'uu13': table[2][3], 'ui13': table[2][4], 'ii13': table[2][5],
+                'u14': table[3][1], 'i14': table[3][2], 'uu14': table[3][3], 'ui14': table[3][4], 'ii14': table[3][5],
+                'u15': table[4][1], 'i15': table[4][2], 'uu15': table[4][3], 'ui15': table[4][4], 'ii15': table[4][5],
+                'suu1': table[5][4], 'sui1': table[5][5], 'sii1': table[5][6],
+
+                'l2': table[6][1],    
+                'u21': table[6][2], 'i21': table[6][3], 'uu21': table[6][4], 'ui21': table[6][5], 'ii21': table[6][6],
+                'u22': table[7][1], 'i22': table[7][2], 'uu22': table[7][3], 'ui22': table[7][4], 'ii22': table[7][5],
+                'u23': table[8][1], 'i23': table[8][2], 'uu23': table[8][3], 'ui23': table[8][4], 'ii23': table[8][5],
+                'u24': table[9][1], 'i24': table[9][2], 'uu24': table[9][3], 'ui24': table[9][4], 'ii24': table[9][5],
+                'u25': table[10][1], 'i25': table[10][2], 'uu25': table[10][3], 'ui25': table[10][4], 'ii25': table[10][5],
+                'suu2': table[11][4], 'sui2': table[11][5], 'sii2': table[11][6],
+
+                'l3': table[12][1],    
+                'u31': table[12][2], 'i31': table[12][3], 'uu31': table[12][4], 'ui31': table[12][5], 'ii31': table[12][6],
+                'u32': table[13][1], 'i32': table[13][2], 'uu32': table[13][3], 'ui32': table[13][4], 'ii32': table[13][5],
+                'u33': table[14][1], 'i33': table[14][2], 'uu33': table[14][3], 'ui33': table[14][4], 'ii33': table[14][5],
+                'u34': table[15][1], 'i34': table[15][2], 'uu34': table[15][3], 'ui34': table[15][4], 'ii34': table[15][5],
+                'u35': table[16][1], 'i35': table[16][2], 'uu35': table[16][3], 'ui35': table[16][4], 'ii35': table[16][5],
+                'suu3': table[17][4], 'sui3': table[17][5], 'sii3': table[17][6],
+
+               'output': output
+               }
+    doc.render(context)
+    # doc.save("output32.docx")
+    # Сохраняем документ в BytesIO
+    doc_bytes = BytesIO()
+    doc.save(doc_bytes)
+    doc_bytes.seek(0)
+
+    # Create a response object
+    response = make_response(send_file(doc_bytes, download_name='output32.docx', as_attachment=True))
+
+    # Set content type explicitly
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+    # Return the response
+    return response, 200
+
+
+
 
 
 @app.route('/logout')

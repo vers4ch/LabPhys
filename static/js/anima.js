@@ -56,6 +56,7 @@ function draw() {
   let plankWidth = width/3;
   let plankHeight = plankWidth * 0.13333;
   let sensorHeight = plankWidth * 0.2666;
+  prevMouseY = mouseY;
   image(plank, plankX, plankY, plankWidth, plankHeight);
   image(sensor, 0, 100, plankWidth, sensorHeight);
 
@@ -77,8 +78,17 @@ function mouseDragged() {
 	mouseY < 270 &&
 	mouseX < 350
   ) {
-	plankY += deltaY/3;
-	prevMouseY = mouseY;
+	if(plankY + deltaY > 430-length*3){
+		deltaY = 0
+		plankY +=deltaY
+	}
+	else if(plankY + deltaY < 1){
+		deltaY = 0
+		plankY +=deltaY
+	}
+	else{
+		plankY += deltaY/3;
+	}
   }
 }
 
@@ -96,7 +106,7 @@ class Pendulum {
 	this.angleVelocity = 0.0;
 	this.angleAcceleration = 0.0;
 	// this.dampingFactor = 0.996;
-	this.dampingFactor = 1.0;
+	this.dampingFactor = 0.997;
 	this.airResistance = 0.0;
 	this.gravity = 9.80665;
 
@@ -118,9 +128,6 @@ class Pendulum {
 			}
 	}
 	
-	//ЗДЕСЬ ДОБАВИТЬ ПОГРЕШНОСТЬ
-
-
 	const actualPeriod = (2 * Math.PI * Math.sqrt(this.armLength / this.gravity) + randomError) / 10.0;
 	period = actualPeriod;
 
