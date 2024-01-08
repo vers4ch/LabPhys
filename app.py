@@ -466,6 +466,6 @@ def send_confirmation_email(email, code):
 # Запуск приложения
 if __name__ == '__main__':
     os.system("clear")
-    # webbrowser.open('http://127.0.0.1:5000/')
+    webbrowser.open('http://127.0.0.1:5002/')
     # Запуск приложения в режиме отладки
     app.run(debug=True, port=5002)
