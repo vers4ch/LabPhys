@@ -132,3 +132,35 @@ body{
     cursor: pointer;
     background-color: rgb(255, 68, 68);
 }
+
+p{
+    margin: 10px;
+}
+
+.central{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img{
+    width: 500px;
+    background-color: rgb(39, 43, 49);
+    border-radius: 10px;
+    margin-top: 50px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.img p{
+    text-align: center;
+    font-size: 18px;
+    border-radius: 10px;
+    width: 95%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    background-color: #393E46;
+}

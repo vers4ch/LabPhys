@@ -15,7 +15,7 @@
     /* Замените на ссылку на шрифт с CDN, если используете CDN */
 }
 
-h2{
+h1{
     margin: 0;
 }
 
@@ -30,19 +30,15 @@ h2{
     cursor: pointer;
 }
 .header{
+    margin: 0;
+    vertical-align: middle;
+	line-height: 8vh;
     background-color: #00ADB5;
+	text-align: center;
     color: #FFFFFF;
     border-radius: 5px;
-    height: 11vh;
+    height: 8vh;
     width: 100%;
-}
-#headerMain{
-    padding-left: 20px;
-    padding-top: 10px;
-}
-#headerPreMain{
-    margin-top: 10px;
-    padding-left: 20px;
 }
 body{
     color: #FFFFFF;
@@ -52,10 +48,7 @@ body{
 }
 
 .lab{
-    /* padding-top: 1vh; */
-    /* margin-left: 10px; */
-    width: 80%; /* Ширина блоков (оставлено пространство для отступов) */
-    /* background-color: rebeccapurple; */
+    width: 80%;
 }
 
 
@@ -113,14 +106,11 @@ p{
 
 .container {
     display: flex;
-    /* justify-content: space-between; */
     justify-content: space-around;
-    /* background-color: #ce2929; */
 }
 .graph-container{
     padding-top: 1vh;
     width: 50%; /* Ширина блоков (оставлено пространство для отступов) */
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -161,16 +151,18 @@ button {
 }
 
 .linki{
-    /* background-color: #393E46; */
-    margin-top: -0.5em;
-    /* margin-top: 0.5em; */
+    margin: 10px;
+    /* margin-left: 0;
+    margin-right: 0; */
+    /* margin-top: -0.5em; */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 4vh;
+    margin-bottom: -0.5em;
 }
 
-.hrefL{
+.hrefL, .hrefLE{
     color: #FFFFFF;
     text-align: center;
     vertical-align: middle;
@@ -217,12 +209,10 @@ button {
     text-transform: uppercase;
     text-decoration: none;
 }
-.exit:hover{
+.hrefLE:hover{
     cursor: pointer;
-    color: red;
+    background-color: red;
 }
-
-
 
 .password {
 	width: 300px;
@@ -319,30 +309,21 @@ h4{
     cursor: pointer;
 }
 
-#app {
-    text-align: center;
-    margin-top: 50px;
-}
-
-#app button, input, div {
-    margin: 10px;
-}
-
-
-
 
 
 .central{
+    margin: 0;
+    margin-top: 10px;
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
 .main{
-    margin: 0;
+    /* margin: 0; */
+    margin: 10px;
     display: flex;
-    width: 80%;
-    /* background-color: rebeccapurple; */
+    width: 77%;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: center;
@@ -355,10 +336,9 @@ h4{
     background-color: white;
 }
 .tables{
+    margin-left: 10px;
     display: flex;
     width: 60%;
-    margin-top: 30px;
-    margin-bottom: 30px;
     border-radius: 10px;
     background-color: #393E46;
     justify-content: center;
@@ -372,11 +352,12 @@ h4{
     align-items: center;
 }
 .chater{
-    width: 20%;
+    width: 23%;
+    margin: 0;
 }
 
-
 .ch1{
+    margin: 0;
     border-radius: 10px;
     background-color: #393E46;
     height: 8vh;
@@ -384,7 +365,8 @@ h4{
     margin-bottom: 10px;
 }
 .ch2{
-    height: 550px;
+    margin: 0;
+    height: 715px;
     border-radius: 10px;
     background-color: #393E46;
 }

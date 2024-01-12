@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторная работа №1.1</title>
+    <title>LabPhys - Профиль</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
@@ -28,5 +28,23 @@
         <div class="spacer"></div>
         <a class="hrefExit" href="logout">Выйти</a>
     </div>
+
+    <div class="central">
+        <div class="img">
+            <h2>Информация об аккаунте</h2>
+            <p>ID: {{ user.user_id}}</p>
+            <p>ФИО: {{ user.last_name }} {{ user.first_name}} {{ user.patronymic }}</p>
+            <p>Логин: {{ user.username}}</p>
+            <p>Почта: {{ user.email}}</p>
+            <p>Группа: {{ user.group}}</p>
+            <p>Преподаватель: {{ user.teacher }}</p>
+        </div>
+
+        <a href="{{ url_for('reset_password') }}" style="color: rgb(86, 222, 253);">Сбросить пароль</a>
+
+        <p style="margin-top: 50px;">Техническая поддержка: degtyarev.dv@dvfu.ru</p>
+    </div>
+
+
 </body>
 </html>

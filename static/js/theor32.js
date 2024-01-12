@@ -7,6 +7,7 @@ function openModal() {
 function closeModal() {
     document.getElementById('myModal').style.display = 'none';
 	document.getElementById('myModal2').style.display = 'none';
+    document.getElementById('mySchemeModal').style.display = 'none';
 }
 
 // Закрыть модальное окно при клике вне окна
@@ -16,6 +17,12 @@ window.onclick = function(event) {
         modal.style.display = 'none';
     }
 };
+
+
+// Открыть модальное окно
+function openSchemeModal() {
+    document.getElementById('mySchemeModal').style.display = 'block';
+}
 
 
 // Функция открытия модального окна для отчета

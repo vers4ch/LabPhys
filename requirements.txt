@@ -1,0 +1,8 @@
+Flask
+psycopg2-binary
+gunicorn
+gspread
+flask_mail
+docxtpl
+plotly.express
+docx

@@ -11,22 +11,31 @@
 </head>
 <body>
     <div class="header">
-        <h2 id="headerMain">Лабораторная работа №1.1 на тему:</h2>
-        <h2 id="headerPreMain">«Определение ускорения свободного падения при помощи математического маятника»</h2>
+        <h1 id="headerMain">Ход работы</h1>
     </div>
     <div style="text-align: right; padding-right: 1%; padding-bottom: 2%; margin-top: -2%;"><a href="{{ url_for('profile') }}" class="profile">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a></div>
+    
     <div class="linki">
         <a class="hrefL" href="#" onclick="openModal()">Теория</a>
         <div class="spacer"></div>
-        <a class="hrefL" href="laboratories">Лаборатории</a>
+        <a class="hrefL" href="#" onclick="openSchemeModal()">Схема установки</a>
         <div class="spacer"></div>
         <a class="hrefL" href="#" onclick="openReportModal()">Отчет</a>
+        <div class="spacer"></div>
+        <a class="hrefLE" href="laboratories">Выход</a>
     </div>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <iframe src="static/documents/theorLab11.html" width="100%" height="650px"></iframe>
+        </div>
+    </div>
+
+    <div id="mySchemeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <iframe src="static/documents/scheme11.html" width="100%" height="650px"></iframe>
         </div>
     </div>
 
@@ -103,10 +112,10 @@
                             <tr>
                                 <th width="5%">Опыт</th>
                                 <th width="5%">№ измерения</th>
-                                <th>L, м.</th>
-                                <th>T, с.</th>
-                                <th width="8%">Тср., с</th>
-                                <th width="5%">g, м/с²</th>
+                                <th>L, <i>м.</i></th>
+                                <th>T, <i>с.</i></th>
+                                <th width="8%">Тср., <i>с</i></th>
+                                <th width="5%">g, <i>м/с²</i></th>
                             </tr>
                         </thead>
                         <tbody>

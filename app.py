@@ -1,23 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_file, make_response
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, make_response
 from flask import abort
 from google.oauth2 import service_account
 import gspread
-from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import webbrowser
 from flask_mail import Mail, Message
 import random
 import string
 from config import MAIL_USERNAME, MAIL_PASSWORD, MAIL_DEFAULT_SENDER
-from docxtpl import DocxTemplate, InlineImage
-from docx.shared import Mm
-import plotly.express as px
-from docx import Document
+from docxtpl import DocxTemplate
 from io import BytesIO
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '314'
-
 
 # Учетные данные в формате JSON
 credentials_json = {
@@ -33,24 +28,16 @@ credentials_json = {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/versach%40labphys.iam.gserviceaccount.com",
   "universe_domain": "googleapis.com"
 }
-
 # Авторизация через Google Sheets API с использованием учетных данных
 credentials = service_account.Credentials.from_service_account_info(
     credentials_json,
     scopes=['https://www.googleapis.com/auth/spreadsheets']
 )
-
 gc = gspread.authorize(credentials)
-
 # ID вашей таблицы
 spreadsheet_id = '1dCcliW2UFKtvVjIMjYO_Br4oq4Pv66MsI-04ilDbeLs'
-
-
 # Открываем лист для работы
 sheet = gc.open_by_key(spreadsheet_id).get_worksheet(0)
-
-
-
 
 # Настройте Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.yandex.ru'
@@ -67,12 +54,9 @@ def GetGoogleUsers():
     return sheet.get_all_records()
 
 
-
 def get_last_numeric_value(column_index):
-
     # Получаем все значения из столбца
     column_values = sheet.col_values(column_index)
-
     # Ищем последнее численное значение в обратном порядке
     for value in reversed(column_values):
         try:
@@ -80,7 +64,6 @@ def get_last_numeric_value(column_index):
             return numeric_value
         except ValueError:
             pass  # Пропускаем значения, которые не могут быть преобразованы в число
-
     return None  # Если нет численных значений
 
 #register.html
@@ -89,19 +72,14 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
         email = request.form['email']
         group = request.form['group']
-
         last_name = request.form['last_name']
         first_name = request.form['first_name']
         patronymic = request.form['patronymic']
-
         teacher = request.form['teacher']
-
         #security
         # hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-
         # Добавление данных в таблицу c функцией автоинкремента
         data_to_insert = [get_last_numeric_value(1)+1, username, last_name, first_name, patronymic, email, group, 0, 0, password, teacher]
         # Получение данных из столбца B
@@ -110,7 +88,6 @@ def register():
         row_number = len(column_b_data) + 1
         # Вставка данных в найденную строку
         sheet.insert_row(data_to_insert, row_number)
-
         flash('Вы успешно зарегистрированы!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
@@ -126,11 +103,15 @@ def login():
 
         if Guser['username'] == username and Guser['password'] == password:
             session['user_id'] = Guser['id']
+            session['username'] = Guser['username']
             session['first_name'] = Guser['first_name']
             session['last_name'] = Guser['last_name']
             session['patronymic'] = Guser['patronymic']
             session['teacher'] = Guser['teacher']
             session['group'] = Guser['group']
+            session['is_admin'] = Guser['is_admin']
+            session['is_teacher'] = Guser['is_teacher']
+            session['email'] = Guser['email']
 
             return redirect(url_for('labors'))
         else:
@@ -141,8 +122,26 @@ def login():
 @app.route('/laba11')
 def laba11():
     if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        return render_template('lab11.html', user=Guser)
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('laba11/lab11.html', user=session)
+    else:
+        return redirect(url_for('login'))
+    
+#theor11.html
+@app.route('/theor11')
+def theor11():
+    if 'user_id' in session:
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('laba11/theor11.html', user=session)
+    else:
+        return redirect(url_for('login'))
+    
+#scheme11.html
+@app.route('/scheme11')
+def scheme11():
+    if 'user_id' in session:
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('laba11/scheme11.html', user=session)
     else:
         return redirect(url_for('login'))
     
@@ -152,11 +151,31 @@ def laba11():
 @app.route('/laba32')
 def laba32():
     if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        return render_template('lab32.html', user=Guser)
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('laba32/lab32.html', user=session)
     else:
         return redirect(url_for('login'))
     
+
+#theor32.html
+@app.route('/theor32')
+def theor32():
+    if 'user_id' in session:
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('laba32/theor32.html', user=session)
+    else:
+        return redirect(url_for('login'))
+    
+#scheme32.html
+@app.route('/scheme32')
+def scheme32():
+    if 'user_id' in session:
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('laba32/scheme32.html', user=session)
+    else:
+        return redirect(url_for('login'))
+
+
 
 
     
@@ -164,8 +183,8 @@ def laba32():
 @app.route('/laboratories')
 def labors():
     if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        return render_template('labors.html', user=Guser)
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('labors.html', user=session)
     else:
         return redirect(url_for('login'))
     
@@ -175,8 +194,8 @@ def labors():
 @app.route('/profile')
 def profile():
     if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        return render_template('profile.html', user=Guser)
+        # Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
+        return render_template('profile.html', user=session)
     else:
         return redirect(url_for('login'))
 
@@ -203,13 +222,6 @@ def teacher():
             abort(403)
     else:
         return redirect(url_for('login'))
-
-
-
-
-
-
-
 
 
 
@@ -384,6 +396,16 @@ def generate_report32():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
+    session['user_id'] = None
+    session['username'] = None
+    session['first_name'] = None
+    session['last_name'] = None
+    session['patronymic'] = None
+    session['teacher'] = None
+    session['group'] = None
+    session['is_admin'] = None
+    session['is_teacher'] = None
+    session['email'] = None
     return redirect(url_for('login'))
 
 #reset_password.html
@@ -448,6 +470,17 @@ def change_password(user_id):
             # Обновление данных в строке
             sheet.update(f'J{row_index}', [[new_password]])
             flash('Пароль успешно изменен!', 'success')
+            session.pop('user_id', None)
+            session['user_id'] = None
+            session['username'] = None
+            session['first_name'] = None
+            session['last_name'] = None
+            session['patronymic'] = None
+            session['teacher'] = None
+            session['group'] = None
+            session['is_admin'] = None
+            session['is_teacher'] = None
+            session['email'] = None
             return redirect(url_for('login'))
         return render_template('change_password.html', user=Guser)
     else:

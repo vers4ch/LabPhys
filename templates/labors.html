@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторная работа №1.1</title>
+    <title>LabPhys</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
@@ -12,14 +12,26 @@
 </head>
 <body>
     <div class="header">
-        <h1 id="headerMain">Лаборатории</h2>
-        <div style="text-align: right; padding-right: 1%; padding-bottom: 5.5vh; margin-top: -5.5vh;"><a href="{{ url_for('profile') }}" class="profile">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a></div>
+        <h1 id="headerMain">Дальневосточный федеральный университет, Институ наукоемких технологий и передовых материалов, Департамент общей и экспериментальной физки.</h1>
+        <div style="text-align: right; padding-right: 1%; padding-bottom: 5.5vh; margin-top: -4vh;"><a href="{{ url_for('profile') }}" class="profile">{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</a></div>
     </div>
 
 
     <div class="labsList">
-        <a class="labBox" href="laba11">Лабораторная работа №1.1</a>
-        <a class="labBox" href="laba32">Лабораторная работа №3.2</a>
+
+            <a href="theor11" class="button-a">
+                <div class="button-container">
+                    <p>Лабораторная работа №1.1</p>
+                    <img style="border-radius: 5px;" src="static/img/mp.jpeg" height="300px" alt="Изображение">
+                </div>
+            </a>
+
+            <a href="theor32" class="button-a">
+                <div class="button-container">
+                    <p>Лабораторная работа №3.2</p>
+                    <img style="border-radius: 5px;" src="static/img/om.jpeg" height="300px" alt="Изображение">
+                </div>
+            </a>
     </div>
 </body>
 </html>

@@ -105,13 +105,13 @@ class Pendulum {
 	this.angle = radians(parseInt(document.getElementById('theta-input').value));
 	this.angleVelocity = 0.0;
 	this.angleAcceleration = 0.0;
-	// this.dampingFactor = 0.996;
-	this.dampingFactor = 0.997;
+	// this.dampingFactor = 0.997;
+	this.dampingFactor = 1.0;
 	this.airResistance = 0.0;
 	this.gravity = 9.80665;
 
 	// Генерируем случайное число в диапазоне от -0.1 до 0.1 (например)
-	randomError = (Math.random() - 0.5) * 0.46; // Измените 0.2 на желаемую амплитуду погрешности
+	randomError = (Math.random() - 0.5) * 0.46; // Изменить 0.2 на желаемую амплитуду погрешности
 	// console.log(randomError);
   }
 
