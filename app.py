@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, make_response
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash, send_file, make_response
 from flask import abort
 from google.oauth2 import service_account
 import gspread
@@ -203,9 +203,11 @@ def profile():
 @app.route('/admin')
 def admin():
     if 'user_id' in session:
-        Guser = next((user for user in GetGoogleUsers() if user.get('id') == session['user_id']), None)
-        if Guser and Guser['is_admin'] == 1:
-            return render_template('admin.html', user=Guser)
+        if session and session['is_admin'] == 1:
+            Gusers = GetGoogleUsers()
+            # print(Gusers)
+
+            return render_template('admin.html', user=session, sheets=Gusers)
         else:
             abort(403)
     else:
@@ -493,6 +495,27 @@ def send_confirmation_email(email, code):
 
     subject = 'Код подтверждения сброса пароля'
     body = f'Ваш код подтверждения: {code}\nВаш логин: {username}'
+    msg = Message(subject, recipients=[email], body=body)
+    mail.send(msg)
+
+
+
+@app.route('/send_pass', methods=['POST'])
+def send_pass():
+    # Получаем id кнопки из данных AJAX-запроса
+    button_id = request.form.get('button_id')
+    send_pass_email(button_id)
+    return jsonify({'status': 'success'})
+
+
+def send_pass_email(email):
+    Guser = next((user for user in GetGoogleUsers() if user.get('email') == email), None)
+    username = Guser['username']
+    name = Guser['first_name'] + " " + Guser['patronymic'] 
+    password = Guser['password']
+
+    subject = 'Логина и пароль от LabPhys'
+    body = f'Уважаемый(ая) {name}, Вам были отправлены данные от аккаунта на платформе LabPhys\n\nЛогин: {username}\nПароль: {password}'
     msg = Message(subject, recipients=[email], body=body)
     mail.send(msg)
 

@@ -119,8 +119,102 @@ body{
 	color: red;
 }
 
+/* .img{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+.central{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
 .img{
+    width: 90%;
+    background-color: rgb(39, 43, 49);
+    border-radius: 10px;
+    margin-top: 50px;
 	display: flex;
     flex-direction: column;
     align-items: center;
 }
+
+.img p{
+    text-align: center;
+    font-size: 18px;
+    border-radius: 10px;
+    width: 95%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    background-color: #393E46;
+}
+
+/* Добавляем стили для рамок вокруг ячеек таблицы 
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-left: 40px;
+    margin-bottom: 10px; /* Отступ снизу таблицы 
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
+
+td[contenteditable="true"] {
+    color: #9d9d9d;
+}
+
+td[contenteditable="false"] {
+    color: #ffffff;
+}*/
+
+.delete-btn {
+    border: 1px solid rgb(39, 43, 49);
+    height: 40px;
+    background-color: transparent;
+    cursor: pointer;
+    color: white; /* или другой цвет, который вы предпочитаете */
+    text-decoration: none;
+    padding: 10px;
+    margin: 1px;
+    border-radius: 10px;
+    color: white;
+    background-color: green;
+}
+
+.btn-cont{
+    margin-top: 42px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+#data-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #3e3e3e;
+    text-align: left;
+    padding: 8px;
+}
+
+tr{
+    height: 40px;
+}
+.table-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }

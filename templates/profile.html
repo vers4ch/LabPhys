@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="static/img/favicon.ico" />
     <title>LabPhys - Профиль</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
@@ -20,13 +21,13 @@
             <a class="hrefLA" href="admin">Админ</a>
             <div class="spacer"></div>
         {% endif %}
-        {% if user.is_teacher == 1 %}
+        {% if user.is_teacher == 2 %}
             <a class="hrefLA" href="admin">Преподаватель</a>
             <div class="spacer"></div>
         {% endif %}
-        <a class="hrefL" href="laboratories">Лаборатории</a>
+        <a class="hrefL" href="laboratories">Главное меню</a>
         <div class="spacer"></div>
-        <a class="hrefExit" href="logout">Выйти</a>
+        <a class="hrefExit" href="logout">Выйти из аккаунта</a>
     </div>
 
     <div class="central">
@@ -36,8 +37,10 @@
             <p>ФИО: {{ user.last_name }} {{ user.first_name}} {{ user.patronymic }}</p>
             <p>Логин: {{ user.username}}</p>
             <p>Почта: {{ user.email}}</p>
+            {% if user.is_teacher != 1 %}
             <p>Группа: {{ user.group}}</p>
             <p>Преподаватель: {{ user.teacher }}</p>
+            {% endif %}
         </div>
 
         <a href="{{ url_for('reset_password') }}" style="color: rgb(86, 222, 253);">Сбросить пароль</a>

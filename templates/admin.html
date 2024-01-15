@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="static/img/favicon.ico" />
     <title>LabPhys</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="static/js/table.js"></script>
     <link rel="stylesheet" href="static/style/admin.css">
 </head>
@@ -17,17 +19,82 @@
     </div>
 
     <div class="linki">
-        <a class="hrefL" href="laboratories">Лаборатории</a>
+        <a class="hrefL" href="laboratories">Главное меню</a>
     </div>
 
-	<h1 class="lableAdmin">YOU ARE AN ADMIN!</h1>
-	<div class="img">
-		<img src="/static/img/kraken.jpg" alt="КРАКЕН">
-		<p>ID: {{ user.id}}</p>
-		<p>Логин: {{ user.username}}</p>
-		<p>Почта: {{ user.email}}</p>
-		<p>Группа: {{ user.group}}</p>
-	</div>
+    <div class="central">
+        <div class="img">
+            <h2>Информация о пользователях</h2>
+            <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Логин</th>
+                        <th>ФИО</th>
+                        <th>Почта</th>
+                        <th>Группа</th>
+                        <th>Преподаватель</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sheet in sheets %}
+                    <tr>
+                        <td>{{ sheet.id }}</td>
+                        <td>{{ sheet.username }}</td>
+                        <td>{{ sheet.last_name }} {{ sheet.first_name }} {{ sheet.patronymic }}</td>
+                        <td>{{ sheet.email }}</td>
+                        <td>{{ sheet.group }}</td>
+                        <td>{{ sheet.teacher }}</td>
+                        <!-- <td><button class="delete-btn">Напомнить пароль</button></td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+                <div class="btn-cont">
+                    {% for sheet in sheets %}
+                    <button type="button" class="delete-btn" id="{{ sheet.email }}" onclick="confirmExecute(this.id)">Напомнить пароль</button>
+                    {% endfor %}
+                </div>
+            </div>  
+
+
+            
+        </div>
+
+        <p style="margin-top: 50px;">Техническая поддержка: degtyarev.dv@dvfu.ru</p>
+    </div>
+
+    <script>
+
+        function confirmExecute(buttonId) {
+            // Выводим диалоговое окно с подтверждением
+            var userConfirmed = confirm("Отправить пароль на: " + buttonId + "?");
+            
+            // Если пользователь подтвердил, выполняем функцию
+            if (userConfirmed) {
+                executeFunction(buttonId);
+            }
+        }
+
+
+        function executeFunction(buttonId) {
+            // Используем jQuery для отправки AJAX-запроса
+            $.ajax({
+                type: 'POST',
+                url: '/send_pass',
+                data: {'button_id': buttonId},
+                success: function(response) {
+                    // Обработка успешного выполнения запроса
+                    console.log(response);
+                },
+                error: function(error) {
+                    // Обработка ошибок
+                    console.log(error);
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>
