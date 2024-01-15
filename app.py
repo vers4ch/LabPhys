@@ -514,7 +514,7 @@ def send_pass_email(email):
     name = Guser['first_name'] + " " + Guser['patronymic'] 
     password = Guser['password']
 
-    subject = 'Логина и пароль от LabPhys'
+    subject = 'Логин и пароль от LabPhys'
     body = f'Уважаемый(ая) {name}, Вам были отправлены данные от аккаунта на платформе LabPhys\n\nЛогин: {username}\nПароль: {password}'
     msg = Message(subject, recipients=[email], body=body)
     mail.send(msg)
